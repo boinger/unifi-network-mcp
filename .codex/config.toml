@@ -14,9 +14,9 @@ log_user_prompt = true
 endpoint = "http://127.0.0.1:38726/v1/logs"
 protocol = "json"
 
-[mcp_servers.oak-ci]
+[mcp_servers.oak-team]
 command = "oak"
 args = [
-    "ci",
+    "team",
     "mcp",
 ]

@@ -1,19 +1,24 @@
-version: 1.2.7
+version: 1.5.0
 agents: [claude, cursor, codex]
 rfc:
   directory: oak/rfc
   template: engineering
-  auto_number: true
-  number_format: sequential
   validate_on_create: true
 constitution:
   directory: oak
 languages:
   installed: [python, javascript, typescript]
 skills:
-  installed: [project-governance, codebase-intelligence, context-engineering]
+  installed:
+  - project-governance
+  - context-engineering
+  - oak
+  - dependency-audit
+  - pattern-finder
+  - swarm
+  - swarm-report
   auto_install: true
-codebase_intelligence:
+team:
   agents:
     enabled: true
     max_turns: 50
@@ -27,8 +32,6 @@ codebase_intelligence:
     stale_timeout_seconds: 3600
   backup:
     on_upgrade: true
-  index_on_startup: true
-  watch_files: true
   exclude_patterns:
   - .git
   - .git/**
@@ -118,3 +121,8 @@ codebase_intelligence:
     similarity_threshold: 0.85
     similarity_threshold_no_context: 0.92
     search_limit: 5
+  team:
+    sync_interval_seconds: 3
+    project_slug: null
+    relay_worker_url: https://oak-relay-unifi-network-mcp.goondocks.co
+    relay_worker_name: null
