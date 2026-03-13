@@ -26,7 +26,7 @@ class NetworkManager:
     async def get_networks(self) -> List[Dict[str, Any]]:
         """Get list of networks (LAN/VLAN) for the current site."""
         cache_key = f"{CACHE_PREFIX_NETWORKS}_{self._connection.site}"
-        cached_data = self._connection.get_cached(cache_key)
+        cached_data = self._connection.get_cached(cache_key, timeout=120)
         if cached_data is not None:
             return cached_data
 
@@ -62,7 +62,7 @@ class NetworkManager:
             # Return the list of network dictionaries
             networks = networks_data
 
-            self._connection._update_cache(cache_key, networks)
+            self._connection._update_cache(cache_key, networks, timeout=120)
             return networks
         except Exception as e:
             # Log original error for V1 endpoint failure
@@ -178,7 +178,7 @@ class NetworkManager:
     async def get_wlans(self) -> List[Wlan]:
         """Get list of wireless networks (WLANs) for the current site."""
         cache_key = f"{CACHE_PREFIX_WLANS}_{self._connection.site}"
-        cached_data: Optional[List[Wlan]] = self._connection.get_cached(cache_key)
+        cached_data: Optional[List[Wlan]] = self._connection.get_cached(cache_key, timeout=120)
         if cached_data is not None:
             return cached_data
 
@@ -187,7 +187,7 @@ class NetworkManager:
             response = await self._connection.request(api_request)
             wlans_data = response if isinstance(response, list) else []
             wlans: List[Wlan] = [Wlan(raw_wlan) for raw_wlan in wlans_data]
-            self._connection._update_cache(cache_key, wlans)
+            self._connection._update_cache(cache_key, wlans, timeout=120)
             return wlans
         except Exception as e:
             logger.error(f"Error getting WLANs: {e}")

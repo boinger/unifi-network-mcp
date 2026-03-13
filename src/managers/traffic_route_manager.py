@@ -41,7 +41,7 @@ class TrafficRouteManager:
             List of traffic route objects.
         """
         cache_key = f"{CACHE_PREFIX_TRAFFIC_ROUTES}_{self._connection.site}"
-        cached_data = self._connection.get_cached(cache_key)
+        cached_data = self._connection.get_cached(cache_key, timeout=120)
         if cached_data is not None:
             return cached_data
 
@@ -57,7 +57,7 @@ class TrafficRouteManager:
                 else []
             )
 
-            self._connection._update_cache(cache_key, routes)
+            self._connection._update_cache(cache_key, routes, timeout=120)
             return routes
         except Exception as e:
             logger.error(f"Error getting traffic routes: {e}")

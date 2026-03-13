@@ -46,6 +46,44 @@ make pre-release   # full release validation
 | `src/utils/lazy_tool_loader.py` | TOOL_MODULE_MAP, lazy loading |
 | `src/tools_manifest.json` | Pre-generated tool metadata (MUST be committed) |
 
+## Fork: boinger/unifi-network-mcp
+
+This is a fork of `sirkirby/unifi-network-mcp`. Remotes:
+- `origin` = `boinger/unifi-network-mcp`
+- `upstream` = `sirkirby/unifi-network-mcp`
+
+### Upstream sync workflow
+
+```bash
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+# Then rebase feature branches onto updated main
+```
+
+### Fork-modified files
+
+These files have fork-specific changes. Expect merge conflicts here during
+upstream sync:
+
+| File | Change |
+|------|--------|
+| `src/tools/diagnosis.py` | New file (fork-only composite diagnosis tool) |
+| `src/tools/system.py` | Improved tool descriptions |
+| `src/tools/events.py` | Improved tool descriptions |
+| `src/tools/devices.py` | Improved tool descriptions |
+| `src/tools/clients.py` | Improved tool descriptions |
+| `src/tools/stats.py` | Improved tool descriptions |
+| `src/tools/network.py` | Improved tool descriptions |
+| `src/managers/network_manager.py` | Cache TTL overrides (120s) |
+| `src/managers/firewall_manager.py` | Cache TTL overrides (120s) |
+| `src/managers/usergroup_manager.py` | Cache TTL overrides (120s) |
+| `src/managers/routing_manager.py` | Cache TTL overrides (120s) |
+| `src/managers/traffic_route_manager.py` | Cache TTL overrides (120s) |
+| `src/managers/vpn_manager.py` | Cache TTL overrides (60s) |
+| `CLAUDE.md` | This fork section |
+
 ## Full Details
 
 See `oak/constitution.md` for:

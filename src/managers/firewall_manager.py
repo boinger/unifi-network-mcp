@@ -39,7 +39,7 @@ class FirewallManager:
             List of FirewallPolicy objects.
         """
         cache_key = f"{CACHE_PREFIX_FIREWALL_POLICIES}_{include_predefined}_{self._connection.site}"
-        cached_data: Optional[List[FirewallPolicy]] = self._connection.get_cached(cache_key)
+        cached_data: Optional[List[FirewallPolicy]] = self._connection.get_cached(cache_key, timeout=120)
         if cached_data is not None:
             return cached_data
 
@@ -66,7 +66,7 @@ class FirewallManager:
 
             result = policies
 
-            self._connection._update_cache(cache_key, result)
+            self._connection._update_cache(cache_key, result, timeout=120)
             return result
         except Exception as e:
             logger.error(f"Error getting firewall policies: {e}")
@@ -165,7 +165,7 @@ class FirewallManager:
             List of TrafficRoute objects.
         """
         cache_key = f"{CACHE_PREFIX_TRAFFIC_ROUTES}_{self._connection.site}"
-        cached_data: Optional[List[TrafficRoute]] = self._connection.get_cached(cache_key)
+        cached_data: Optional[List[TrafficRoute]] = self._connection.get_cached(cache_key, timeout=120)
         if cached_data is not None:
             return cached_data
 
@@ -189,7 +189,7 @@ class FirewallManager:
 
             result = routes
 
-            self._connection._update_cache(cache_key, result)
+            self._connection._update_cache(cache_key, result, timeout=120)
             return result
         except Exception as e:
             logger.error(f"Error getting traffic routes: {e}")
@@ -389,7 +389,7 @@ class FirewallManager:
              List of PortForward objects.
         """
         cache_key = f"{CACHE_PREFIX_PORT_FORWARDS}_{self._connection.site}"
-        cached_data: Optional[List[PortForward]] = self._connection.get_cached(cache_key)
+        cached_data: Optional[List[PortForward]] = self._connection.get_cached(cache_key, timeout=120)
         if cached_data is not None:
             return cached_data
 
@@ -410,7 +410,7 @@ class FirewallManager:
 
             result = rules
 
-            self._connection._update_cache(cache_key, result)
+            self._connection._update_cache(cache_key, result, timeout=120)
             return result
         except Exception as e:
             logger.error(f"Error getting port forwards: {e}")
@@ -689,7 +689,7 @@ class FirewallManager:
     async def get_firewall_zones(self) -> List[Dict[str, Any]]:
         """Return list of firewall zones via V2 API."""
         cache_key = f"{CACHE_PREFIX_FIREWALL_ZONES}_{self._connection.site}"
-        cached = self._connection.get_cached(cache_key)
+        cached = self._connection.get_cached(cache_key, timeout=120)
         if cached is not None:
             return cached
         if not await self._connection.ensure_connected():
@@ -698,7 +698,7 @@ class FirewallManager:
             api_request = ApiRequestV2(method="get", path="/firewall/zones")
             resp = await self._connection.request(api_request)
             data = resp if isinstance(resp, list) else resp.get("data", []) if isinstance(resp, dict) else []
-            self._connection._update_cache(cache_key, data)
+            self._connection._update_cache(cache_key, data, timeout=120)
             return data
         except Exception as e:
             logger.error(f"Error fetching firewall zones: {e}")
@@ -707,7 +707,7 @@ class FirewallManager:
     async def get_ip_groups(self) -> List[Dict[str, Any]]:
         """Return list of IP groups via V2 API."""
         cache_key = f"{CACHE_PREFIX_IP_GROUPS}_{self._connection.site}"
-        cached = self._connection.get_cached(cache_key)
+        cached = self._connection.get_cached(cache_key, timeout=120)
         if cached is not None:
             return cached
         if not await self._connection.ensure_connected():
@@ -716,7 +716,7 @@ class FirewallManager:
             api_request = ApiRequestV2(method="get", path="/ip-groups")
             resp = await self._connection.request(api_request)
             data = resp if isinstance(resp, list) else resp.get("data", []) if isinstance(resp, dict) else []
-            self._connection._update_cache(cache_key, data)
+            self._connection._update_cache(cache_key, data, timeout=120)
             return data
         except Exception as e:
             logger.error(f"Error fetching ip groups: {e}")

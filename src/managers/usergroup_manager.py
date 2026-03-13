@@ -35,7 +35,7 @@ class UsergroupManager:
             List of user group objects containing name, bandwidth limits, etc.
         """
         cache_key = f"{CACHE_PREFIX_USERGROUPS}_{self._connection.site}"
-        cached_data = self._connection.get_cached(cache_key)
+        cached_data = self._connection.get_cached(cache_key, timeout=120)
         if cached_data is not None:
             return cached_data
 
@@ -51,7 +51,7 @@ class UsergroupManager:
                 else []
             )
 
-            self._connection._update_cache(cache_key, usergroups)
+            self._connection._update_cache(cache_key, usergroups, timeout=120)
             return usergroups
         except Exception as e:
             logger.error(f"Error getting user groups: {e}")

@@ -88,7 +88,7 @@ class VpnManager:
             List of network configuration dictionaries
         """
         cache_key = f"{CACHE_PREFIX_NETWORKS}_{self._connection.site}"
-        cached_data = self._connection.get_cached(cache_key)
+        cached_data = self._connection.get_cached(cache_key, timeout=60)
         if cached_data is not None:
             return cached_data
 
@@ -105,7 +105,7 @@ class VpnManager:
                 logger.warning(f"Unexpected networkconf response format: {type(response)}")
                 networks = []
 
-            self._connection._update_cache(cache_key, networks)
+            self._connection._update_cache(cache_key, networks, timeout=60)
             return networks
         except Exception as e:
             logger.error(f"Error fetching network configurations: {e}")
@@ -122,7 +122,7 @@ class VpnManager:
             List of VPN configuration dictionaries
         """
         cache_key = f"{CACHE_PREFIX_VPN_CONFIGS}_{self._connection.site}_{include_clients}_{include_servers}"
-        cached_data = self._connection.get_cached(cache_key)
+        cached_data = self._connection.get_cached(cache_key, timeout=60)
         if cached_data is not None:
             return cached_data
 
@@ -147,7 +147,7 @@ class VpnManager:
                     )
 
             logger.debug(f"Found {len(vpn_configs)} VPN configurations")
-            self._connection._update_cache(cache_key, vpn_configs)
+            self._connection._update_cache(cache_key, vpn_configs, timeout=60)
             return vpn_configs
 
         except Exception as e:
