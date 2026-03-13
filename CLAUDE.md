@@ -76,6 +76,7 @@ upstream sync:
 | `src/tools/clients.py` | Improved tool descriptions |
 | `src/tools/stats.py` | Improved tool descriptions |
 | `src/tools/network.py` | Improved tool descriptions |
+| `src/managers/system_manager.py` | Fix list-response handling in `get_system_info()` |
 | `src/managers/network_manager.py` | Cache TTL overrides (120s) |
 | `src/managers/firewall_manager.py` | Cache TTL overrides (120s) |
 | `src/managers/usergroup_manager.py` | Cache TTL overrides (120s) |
