@@ -138,14 +138,25 @@ async def network_diagnosis(include_device_list: bool = False) -> Dict[str, Any]
     """Composite network diagnosis — parallel fetch of key health data."""
     logger.info("unifi_network_diagnosis tool called")
 
-    event_manager = _get_event_manager()
+    try:
+        event_manager = _get_event_manager()
+        alarm_coro = event_manager.get_alarms(archived=False)
+        event_coro = event_manager.get_events(within=24)
+    except Exception as exc:
+        logger.error(f"Failed to initialise event manager: {exc}")
+
+        async def _failed(err):
+            raise err
+
+        alarm_coro = _failed(exc)
+        event_coro = _failed(exc)
 
     # Fetch all data sources in parallel; individual failures degrade gracefully
     results = await asyncio.gather(
         system_manager.get_system_info(),
         system_manager.get_network_health(),
-        event_manager.get_alarms(archived=False),
-        event_manager.get_events(within=24),
+        alarm_coro,
+        event_coro,
         device_manager.get_devices(),
         return_exceptions=True,
     )
